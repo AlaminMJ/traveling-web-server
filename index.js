@@ -29,6 +29,19 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+    // get all order
+    app.get("/allorder", async (req, res) => {
+      const cursor = order.find({});
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    // Add Service
+    app.post("/addservice", async (req, res) => {
+      const data = req.body;
+      const result = await tour.insertOne(data);
+      res.send(result);
+    });
+
     app.get("/:id", async (req, res) => {
       const id = req.params.id;
       const result = await tour.findOne({ _id: ObjectId(id) });
@@ -45,15 +58,32 @@ async function run() {
         res.send("error");
       }
     });
+
     app.post("/placeorder", async (req, res) => {
       const data = req.body;
       const result = await order.insertOne(data);
       res.send(result);
     });
     // delet Order
-    app.delete("/deleteorder", async (req, res) => {
-      const id = req.body.id;
+    app.delete("/order/:id", async (req, res) => {
+      const id = req.params.id;
       const result = await order.deleteOne({ _id: ObjectId(id) });
+      res.send(result);
+    });
+    app.put("/order/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          status: "approve",
+        },
+      };
+      const result = await order.updateOne(
+        { _id: ObjectId(id) },
+        updateDoc,
+        options
+      );
       console.log(result);
       res.send(result);
     });
