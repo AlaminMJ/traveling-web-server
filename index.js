@@ -24,7 +24,7 @@ async function run() {
     const tour = database.collection("tour_collection");
     const order = database.collection("order_collection");
 
-    app.get("/", async (req, res) => {
+    app.get("/service", async (req, res) => {
       const cursor = tour.find({});
       const result = await cursor.toArray();
       res.send(result);
@@ -42,7 +42,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/:id", async (req, res) => {
+    app.get("/service/:id", async (req, res) => {
       const id = req.params.id;
       const result = await tour.findOne({ _id: ObjectId(id) });
       res.send(result);
